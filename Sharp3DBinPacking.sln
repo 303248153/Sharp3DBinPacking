@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharp3DBinPacking", "Sharp3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp3DBinPacking.RandomTest", "Sharp3DBinPacking.RandomTest\Sharp3DBinPacking.RandomTest.csproj", "{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp3DBinPacking.Example", "Sharp3DBinPacking.Example\Sharp3DBinPacking.Example.csproj", "{4D5DBD00-7687-43DA-8229-C0146F1E2A41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5DBD00-7687-43DA-8229-C0146F1E2A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5DBD00-7687-43DA-8229-C0146F1E2A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5DBD00-7687-43DA-8229-C0146F1E2A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5DBD00-7687-43DA-8229-C0146F1E2A41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
