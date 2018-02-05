@@ -21,5 +21,10 @@ namespace Sharp3DBinPacking.Internal
             X = x;
             Y = y;
         }
+
+        public override string ToString()
+        {
+            return $"Rectangle(X: {X}, Y: {Y}, Width: {Width}, Height:{Height})";
+        }
     }
 }

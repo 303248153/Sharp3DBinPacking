@@ -249,6 +249,7 @@ namespace Sharp3DBinPacking.Internal
                 throw new ArithmeticException(
                     $"add free rectangle failed: out of area, rectangle: {freeRectangle}");
             }
+            _freeRectangles.Add(freeRectangle);
         }
     }
 }
