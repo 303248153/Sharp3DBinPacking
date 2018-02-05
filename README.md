@@ -1,5 +1,9 @@
 # 3D bin packing algorithms
 
+[![NuGet](https://img.shields.io/nuget/vpre/Sharp3DBinPacking.svg)](http://www.nuget.org/packages/Sharp3DBinPacking)
+[![license](https://img.shields.io/github/license/303248153/Sharp3DBinPacking.svg)]() 
+[![GitHub release](https://img.shields.io/github/release/303248153/Sharp3DBinPacking.svg)]()
+
 [Bin packing problem](https://en.wikipedia.org/wiki/Bin_packing_problem).
 
 This library is translated from [https://github.com/krris/3d-bin-packing](https://github.com/krris/3d-bin-packing).
@@ -41,6 +45,7 @@ var parameter = new BinPackParameter(binWidth, binHeight, binDepth, new[]
 });
 
 // Create a bin packer instance
+// The default bin packer will test all algorithms and try to find the best result
 // BinPackerVerifyOption is used to avoid bugs, it will check whether the result is correct
 var binPacker = BinPacker.GetDefault(BinPackerVerifyOption.BestOnly);
 

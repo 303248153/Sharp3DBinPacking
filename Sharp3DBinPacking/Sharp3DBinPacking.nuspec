@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Sharp3DBinPacking</id>
+    <version>1.0.0</version>
+    <authors>303248153</authors>
+    <owners>303248153</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>C# version of 3d bin packing algorithms translated from krris/3d-bin-packing </description>
+    <projectUrl>https://github.com/303248153/Sharp3DBinPacking</projectUrl>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <tags></tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETStandard2.0">
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\net45\Sharp3DBinPacking.dll" target="lib\net45" />
+    <file src="bin\Release\netstandard2.0\Sharp3DBinPacking.dll" target="lib\netstandard2.0" />
+  </files>
+</package>

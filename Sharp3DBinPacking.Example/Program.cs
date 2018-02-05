@@ -20,6 +20,7 @@ namespace Sharp3DBinPacking.Example
                 new Cuboid(650, 750, 850),
             });
             // Create a bin packer instance
+            // The default bin packer will test all algorithms and try to find the best result
             // BinPackerVerifyOption is used to avoid bugs, it will check whether the result is correct
             var binPacker = BinPacker.GetDefault(BinPackerVerifyOption.BestOnly);
             // The result contains bins which contains packed cuboids whith their coordinates
