@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2024
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharp3DBinPacking", "Sharp3DBinPacking\Sharp3DBinPacking.csproj", "{5E43899A-E801-4CE8-9E7D-F396A4BE1988}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp3DBinPacking.RandomTest", "Sharp3DBinPacking.RandomTest\Sharp3DBinPacking.RandomTest.csproj", "{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E43899A-E801-4CE8-9E7D-F396A4BE1988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E43899A-E801-4CE8-9E7D-F396A4BE1988}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E43899A-E801-4CE8-9E7D-F396A4BE1988}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E43899A-E801-4CE8-9E7D-F396A4BE1988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0651FAB6-AFEF-45FD-9C5B-1F902CCFE8B2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F7DAEB2F-94AC-49F5-A37C-565081E70F5F}
+	EndGlobalSection
+EndGlobal
