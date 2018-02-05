@@ -17,7 +17,7 @@ namespace Sharp3DBinPacking.Internal
             _binHeight = height;
             _usedRectangles = new List<Rectangle>();
             _freeRectangles = new List<Rectangle>();
-            _freeRectangles.Add(new Rectangle(_binWidth, _binHeight, 0, 0));
+            AddFreeRectangle(new Rectangle(_binWidth, _binHeight, 0, 0));
         }
 
         public void Insert(
@@ -231,9 +231,24 @@ namespace Sharp3DBinPacking.Internal
             // Add the new rectangles into the free rectangle pool if they weren't
             // degenerate.
             if (bottom.Width > 0 && bottom.Height > 0)
-                _freeRectangles.Add(bottom);
+                AddFreeRectangle(bottom);
             if (right.Width > 0 && right.Height > 0)
-                _freeRectangles.Add(right);
+                AddFreeRectangle(right);
+        }
+
+        private void AddFreeRectangle(Rectangle freeRectangle)
+        {
+            if (freeRectangle.X < 0 || freeRectangle.Y < 0)
+            {
+                throw new ArithmeticException(
+                    $"add free rectangle failed: negative position, rectangle: {freeRectangle}");
+            }
+            if (freeRectangle.X + freeRectangle.Width > _binWidth ||
+                freeRectangle.Y + freeRectangle.Height > _binHeight)
+            {
+                throw new ArithmeticException(
+                    $"add free rectangle failed: out of area, rectangle: {freeRectangle}");
+            }
         }
     }
 }

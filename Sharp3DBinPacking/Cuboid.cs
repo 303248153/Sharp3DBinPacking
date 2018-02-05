@@ -13,7 +13,6 @@ namespace Sharp3DBinPacking
         public decimal Y { get; set; }
         public decimal Z { get; set; }
         internal bool IsPlaced { get; set; }
-        internal decimal Score { get; set; } = decimal.MaxValue;
 
         public Cuboid() { }
         public Cuboid(decimal width, decimal height, decimal depth) : this(width, height, depth, 0, 0, 0) { }
@@ -33,24 +32,6 @@ namespace Sharp3DBinPacking
             Y = 0;
             Z = 0;
             IsPlaced = false;
-            Score = decimal.MaxValue;
-        }
-
-        public static bool CompareMaxEdgeGT(Cuboid i, Cuboid j)
-        {
-            decimal iMax = Math.Max(Math.Max(i.Width, i.Height), i.Depth);
-            decimal jMax = Math.Max(Math.Max(j.Width, j.Height), j.Depth);
-            return iMax > jMax;
-        }
-
-        public static bool CompareVolumeGT(Cuboid i, Cuboid j)
-        {
-            return (i.Width * i.Height * i.Depth) > (j.Width * j.Height * j.Depth);
-        }
-
-        public static bool CompareVolumeLT(Cuboid i, Cuboid j)
-        {
-            return (i.Width * i.Height * i.Depth) < (j.Width * j.Height * j.Depth);
         }
 
         public override string ToString()
