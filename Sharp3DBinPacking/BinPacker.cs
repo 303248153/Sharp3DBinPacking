@@ -51,7 +51,7 @@ namespace Sharp3DBinPacking
                     }
                     // verify this result
                     if (_verifyOption == BinPackerVerifyOption.All)
-                        Verify(parameter.BinWidth, parameter.BinHeight, parameter.BinDepth, algorithmName, result);
+                        Verify(parameter, algorithmName, result);
                     // update best result if all cuboids is placed and uses less bins
                     if (unpackedCuboids.Count == 0 &&
                         (bestResult == null || result.Count < bestResult.Count))
@@ -70,13 +70,11 @@ namespace Sharp3DBinPacking
             }
             // verify the best result
             if (_verifyOption == BinPackerVerifyOption.BestOnly)
-                Verify(parameter.BinWidth, parameter.BinHeight, parameter.BinDepth, bestAlgorithmName, bestResult);
+                Verify(parameter, bestAlgorithmName, bestResult);
             return new BinPackResult(bestResult, bestAlgorithmName);
         }
 
-        private void Verify(
-            decimal binWidth, decimal binHeight, decimal binDepth,
-            string algorithmName, IList<IList<Cuboid>> result)
+        private void Verify(BinPackParameter parameter, string algorithmName, IList<IList<Cuboid>> result)
         {
             //       o--------o
             //      /|       /|
@@ -100,9 +98,9 @@ namespace Sharp3DBinPacking
                         throw new ArithmeticException(
                             $"verify cuboid failed: negative position, algorithm: {algorithmName}, cuboid: {cuboid}");
                     }
-                    if (cuboid.X + cuboid.Width > binWidth ||
-                        cuboid.Y + cuboid.Height > binHeight ||
-                        cuboid.Z + cuboid.Depth > binDepth)
+                    if (cuboid.X + cuboid.Width > parameter.BinWidth ||
+                        cuboid.Y + cuboid.Height > parameter.BinHeight ||
+                        cuboid.Z + cuboid.Depth > parameter.BinDepth)
                     {
                         throw new ArithmeticException(
                             $"verify cuboid failed: out of bin, algorithm: {algorithmName}, cuboid: {cuboid}");
@@ -122,6 +120,12 @@ namespace Sharp3DBinPacking
                                 $"verify cuboid failed: cuboid intersects others, algorithm: {algorithmName}, cuboid a: {cuboid}, cuboid b: {otherCuboid}");
                         }
                     }
+                }
+                // check is cuboids overweight
+                if (cuboids.Sum(c => c.Weight) > parameter.BinWeight)
+                {
+                    throw new ArithmeticException(
+                        $"verify cuboid failed: cuboids overweight, algorithm: {algorithmName}");
                 }
             }
         }
