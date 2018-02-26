@@ -65,12 +65,12 @@ Outputs:
 
 ``` text
 Bin:
-Cuboid(X: 0, Y: 0, Z:0, Width: 750, Height:850, Depth:650)
-Cuboid(X: 0, Y: 0, Z:650, Width: 350, Height:350, Depth:350)
-Cuboid(X: 750, Y: 0, Z:0, Width: 150, Height:150, Depth:100)
+Cuboid(X: 0, Y: 0, Z:0, Width: 750, Height:850, Depth:650, Weight: 0, Tag: )
+Cuboid(X: 0, Y: 0, Z:650, Width: 350, Height:350, Depth:350, Weight: 0, Tag: )
+Cuboid(X: 750, Y: 0, Z:0, Width: 150, Height:150, Depth:100, Weight: 0, Tag: )
 Bin:
-Cuboid(X: 0, Y: 0, Z:0, Width: 700, Height:500, Depth:550)
-Cuboid(X: 0, Y: 500, Z:0, Width: 500, Height:500, Depth:500)
+Cuboid(X: 0, Y: 0, Z:0, Width: 700, Height:500, Depth:550, Weight: 0, Tag: )
+Cuboid(X: 0, Y: 500, Z:0, Width: 500, Height:500, Depth:500, Weight: 0, Tag: )
 ```
 
 # License

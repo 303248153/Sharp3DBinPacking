@@ -4,36 +4,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Sharp3DBinPacking
+namespace Sharp3DBinPacking.Algorithms
 {
     public class BinPackShelfAlgorithm : IBinPackAlgorithm
     {
-        private readonly decimal _binWidth;
-        private readonly decimal _binHeight;
-        private readonly decimal _binDepth;
+        private readonly BinPackParameter _parameter;
         private readonly FreeRectChoiceHeuristic _rectChoice;
         private readonly GuillotineSplitHeuristic _splitMethod;
         private readonly ShelfChoiceHeuristic _shelfChoice;
         // stores the starting y coordinate of the latest(topmost) shelf
         private decimal _currentY;
         private readonly IList<Shelf> _shelves;
+        private readonly IList<Cuboid> _packedCuboids;
 
         public BinPackShelfAlgorithm(
-            decimal binWidth,
-            decimal binHeight,
-            decimal binDepth,
+            BinPackParameter parameter,
             FreeRectChoiceHeuristic rectChoice,
             GuillotineSplitHeuristic splitMethod,
             ShelfChoiceHeuristic shelfChoice)
         {
-            _binWidth = binWidth;
-            _binHeight = binHeight;
-            _binDepth = binDepth;
+            _parameter = parameter;
             _rectChoice = rectChoice;
             _splitMethod = splitMethod;
             _shelfChoice = shelfChoice;
             _currentY = 0;
             _shelves = new List<Shelf>();
+            _packedCuboids = new List<Cuboid>();
             StartNewShelf(0);
         }
 
@@ -47,6 +43,10 @@ namespace Sharp3DBinPacking
 
         private void Insert(Cuboid cuboid, ShelfChoiceHeuristic method)
         {
+            // Check is overweight
+            if (cuboid.Weight + _packedCuboids.Sum(x => x.Weight) > _parameter.BinWeight)
+                return;
+
             switch (method)
             {
                 case ShelfChoiceHeuristic.ShelfNextFit:
@@ -88,17 +88,20 @@ namespace Sharp3DBinPacking
             };
             foreach (var whd in whdSet)
             {
-                cuboid.Width = whd.w;
-                cuboid.Height = whd.h;
-                cuboid.Depth = whd.d;
-                if (CanStartNewShelf(cuboid.Height))
+                if (_parameter.AllowRotateVertically || cuboid.Height == whd.h)
                 {
-                    StartNewShelf(cuboid.Height);
-                    PutOnShelf(_shelves.Last(), cuboid);
-                    if (cuboid.IsPlaced)
+                    cuboid.Width = whd.w;
+                    cuboid.Height = whd.h;
+                    cuboid.Depth = whd.d;
+                    if (CanStartNewShelf(cuboid.Height))
                     {
-                        AddToShelf(_shelves.Last(), cuboid);
-                        return;
+                        StartNewShelf(cuboid.Height);
+                        PutOnShelf(_shelves.Last(), cuboid);
+                        if (cuboid.IsPlaced)
+                        {
+                            AddToShelf(_shelves.Last(), cuboid);
+                            return;
+                        }
                     }
                 }
             }
@@ -120,11 +123,8 @@ namespace Sharp3DBinPacking
             var min = edges[0];
 
             // Set cuboid's longest egde vertically
-            if (max > shelf.Height)
-            {
-                // pass
-            }
-            else
+            if (max <= shelf.Height &&
+                (_parameter.AllowRotateVertically || max == cuboid.Height))
             {
                 var maxVerticalRect = new Rectangle(middle, min, 0, 0);
                 var freeRectIndex = 0;
@@ -143,11 +143,8 @@ namespace Sharp3DBinPacking
             }
 
             // Set cuboid's second longest egde vertically
-            if (middle > shelf.Height)
-            {
-                // pass
-            }
-            else
+            if (middle <= shelf.Height &&
+                (_parameter.AllowRotateVertically || middle == cuboid.Height))
             {
                 var middleVerticalRect = new Rectangle(min, max, 0, 0);
                 var freeRectIndex = 0;
@@ -166,11 +163,8 @@ namespace Sharp3DBinPacking
             }
 
             // Set cuboid's smallest egde vertically
-            if (min > shelf.Height)
-            {
-                // pass
-            }
-            else
+            if (min <= shelf.Height &&
+                (_parameter.AllowRotateVertically || min == cuboid.Height))
             {
                 var minVerticalRect = new Rectangle(middle, max, 0, 0);
                 var freeRectIndex = 0;
@@ -196,19 +190,20 @@ namespace Sharp3DBinPacking
             if (shelf.Height < newCuboid.Height)
                 throw new ArithmeticException("shelf.Height < newCuboid.Height");
             newCuboid.Y = shelf.StartY;
+            _packedCuboids.Add(newCuboid);
         }
 
         private bool CanStartNewShelf(decimal height)
         {
             var lastShelf = _shelves.Last();
-            return lastShelf.StartY + lastShelf.Height + height <= _binHeight;
+            return lastShelf.StartY + lastShelf.Height + height <= _parameter.BinHeight;
         }
 
         private void StartNewShelf(decimal startingHeight)
         {
             if (_shelves.Count > 0)
                 _currentY += _shelves.Last().Height;
-            var shelf = new Shelf(_currentY, startingHeight, _binWidth, _binDepth);
+            var shelf = new Shelf(_currentY, startingHeight, _parameter.BinWidth, _parameter.BinDepth);
             _shelves.Add(shelf);
         }
 

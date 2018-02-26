@@ -1,35 +1,30 @@
 ﻿using Sharp3DBinPacking.Internal;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Sharp3DBinPacking
+namespace Sharp3DBinPacking.Algorithms
 {
     public class BinPackGuillotineAlgorithm : IBinPackAlgorithm
     {
-        private readonly decimal _binWidth;
-        private readonly decimal _binHeight;
-        private readonly decimal _binDepth;
+        private readonly BinPackParameter _parameter;
         private readonly FreeCuboidChoiceHeuristic _cuboidChoice;
         private readonly GuillotineSplitHeuristic _splitMethod;
         private readonly IList<Cuboid> _usedCuboids;
         private readonly IList<Cuboid> _freeCuboids;
 
         public BinPackGuillotineAlgorithm(
-            decimal binWidth,
-            decimal binHeight,
-            decimal binDepth,
+            BinPackParameter parameter,
             FreeCuboidChoiceHeuristic cuboidChoice,
             GuillotineSplitHeuristic splitMethod)
         {
-            _binWidth = binWidth;
-            _binHeight = binHeight;
-            _binDepth = binDepth;
+            _parameter = parameter;
             _cuboidChoice = cuboidChoice;
             _splitMethod = splitMethod;
             _usedCuboids = new List<Cuboid>();
             _freeCuboids = new List<Cuboid>();
-            AddFreeCuboid(new Cuboid(_binWidth, _binHeight, _binDepth));
+            AddFreeCuboid(new Cuboid(parameter.BinWidth, parameter.BinHeight, parameter.BinDepth));
         }
 
         public void Insert(IEnumerable<Cuboid> cuboids)
@@ -45,6 +40,10 @@ namespace Sharp3DBinPacking
             FreeCuboidChoiceHeuristic cuboidChoice,
             GuillotineSplitHeuristic splitMethod)
         {
+            // Check is overweight
+            if (cuboid.Weight + _usedCuboids.Sum(x => x.Weight) > _parameter.BinWeight)
+                return;
+
             // Find where to put the new cuboid
             var freeNodeIndex = 0;
             FindPositionForNewNode(cuboid, cuboidChoice, out freeNodeIndex);
@@ -80,7 +79,7 @@ namespace Sharp3DBinPacking
             {
                 var freeCuboid = _freeCuboids[index];
 
-                // Width x Height x Depth
+                // Width x Height x Depth (no rotate)
                 if (width <= freeCuboid.Width &&
                     height <= freeCuboid.Height &&
                     depth <= freeCuboid.Depth)
@@ -100,10 +99,11 @@ namespace Sharp3DBinPacking
                     }
                 }
 
-                // Width x Depth x Height
+                // Width x Depth x Height (rotate vertically)
                 if (width <= freeCuboid.Width &&
                     depth <= freeCuboid.Height &&
-                    height <= freeCuboid.Depth)
+                    height <= freeCuboid.Depth &&
+                    _parameter.AllowRotateVertically)
                 {
                     var score = ScoreByHeuristic(cuboid, freeCuboid, cuboidChoice);
                     if (score < bestScore)
@@ -120,7 +120,7 @@ namespace Sharp3DBinPacking
                     }
                 }
 
-                // Depth x Height x Width
+                // Depth x Height x Width (rotate horizontally)
                 if (depth <= freeCuboid.Width &&
                     height <= freeCuboid.Height &&
                     width <= freeCuboid.Depth)
@@ -140,10 +140,11 @@ namespace Sharp3DBinPacking
                     }
                 }
 
-                // Depth x Width x Height
+                // Depth x Width x Height (rotate horizontally and vertically)
                 if (depth <= freeCuboid.Width &&
                     width <= freeCuboid.Height &&
-                    height <= freeCuboid.Depth)
+                    height <= freeCuboid.Depth &&
+                    _parameter.AllowRotateVertically)
                 {
                     var score = ScoreByHeuristic(cuboid, freeCuboid, cuboidChoice);
                     if (score < bestScore)
@@ -160,10 +161,11 @@ namespace Sharp3DBinPacking
                     }
                 }
 
-                // Height x Width x Depth
+                // Height x Width x Depth (rotate vertically)
                 if (height <= freeCuboid.Width &&
                     width <= freeCuboid.Height &&
-                    depth <= freeCuboid.Depth)
+                    depth <= freeCuboid.Depth &&
+                    _parameter.AllowRotateVertically)
                 {
                     var score = ScoreByHeuristic(cuboid, freeCuboid, cuboidChoice);
                     if (score < bestScore)
@@ -180,10 +182,11 @@ namespace Sharp3DBinPacking
                     }
                 }
 
-                // Height x Depth x Width
+                // Height x Depth x Width (rotate horizontally and vertically)
                 if (height <= freeCuboid.Width &&
                     depth <= freeCuboid.Height &&
-                    width <= freeCuboid.Depth)
+                    width <= freeCuboid.Depth &&
+                    _parameter.AllowRotateVertically)
                 {
                     var score = ScoreByHeuristic(cuboid, freeCuboid, cuboidChoice);
                     if (score < bestScore)
@@ -308,9 +311,9 @@ namespace Sharp3DBinPacking
                 throw new ArithmeticException(
                     $"add free cuboid failed: negative position, algorithm: {this}, cuboid: {freeCuboid}");
             }
-            if (freeCuboid.X + freeCuboid.Width > _binWidth ||
-                freeCuboid.Y + freeCuboid.Height > _binHeight ||
-                freeCuboid.Z + freeCuboid.Depth > _binDepth)
+            if (freeCuboid.X + freeCuboid.Width > _parameter.BinWidth ||
+                freeCuboid.Y + freeCuboid.Height > _parameter.BinHeight ||
+                freeCuboid.Z + freeCuboid.Depth > _parameter.BinDepth)
             {
                 throw new ArithmeticException(
                     $"add free cuboid failed: out of bin, algorithm: {this}, cuboid: {freeCuboid}");

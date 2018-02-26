@@ -1,4 +1,5 @@
-﻿using Sharp3DBinPacking.Internal;
+﻿using Sharp3DBinPacking.Algorithms;
+using Sharp3DBinPacking.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +7,7 @@ using System.Text;
 
 namespace Sharp3DBinPacking
 {
-    public delegate IBinPackAlgorithm BinPackAlgorithmFactory(
-        decimal binWidth, decimal binHeight, decimal binDepth);
+    public delegate IBinPackAlgorithm BinPackAlgorithmFactory(BinPackParameter parameter);
 
     public class BinPacker : IBinPacker
     {
@@ -38,7 +38,7 @@ namespace Sharp3DBinPacking
                     while (unpackedCuboids.Count > 0)
                     {
                         // pack single bin
-                        var algorithm = factory(parameter.BinWidth, parameter.BinHeight, parameter.BinDepth);
+                        var algorithm = factory(parameter);
                         algorithmName = algorithm.ToString();
                         algorithm.Insert(unpackedCuboids);
                         // find out which cuboids are placed
@@ -65,7 +65,8 @@ namespace Sharp3DBinPacking
             {
                 throw new InvalidOperationException(
                     "no algorithm can pack these cuboids\n" +
-                    $"binWidth: {parameter.BinWidth}, binHeight: {parameter.BinHeight}, binDepth: {parameter.BinDepth}\n" +
+                    $"binWidth: {parameter.BinWidth}, binHeight: {parameter.BinHeight}, " +
+                    $"binDepth: {parameter.BinDepth}, binWeight: {parameter.BinWeight}\n" +
                     $"cuboids: {string.Join("\n", parameter.Cuboids.Select(x => x.ToString()))}");
             }
             // verify the best result
@@ -142,22 +143,22 @@ namespace Sharp3DBinPacking
         public static IBinPacker GetDefault(BinPackerVerifyOption verifyOption)
         {
             return new BinPacker(verifyOption,
-                (w, h, d) => new BinPackShelfAlgorithm(
-                    w, h, d,
+                parameter => new BinPackShelfAlgorithm(
+                    parameter,
                     FreeRectChoiceHeuristic.RectBestAreaFit,
                     GuillotineSplitHeuristic.SplitLongerLeftoverAxis,
                     ShelfChoiceHeuristic.ShelfFirstFit),
-                (w, h, d) => new BinPackShelfAlgorithm(
-                    w, h, d,
+                parameter => new BinPackShelfAlgorithm(
+                    parameter,
                     FreeRectChoiceHeuristic.RectBestAreaFit,
                     GuillotineSplitHeuristic.SplitLongerLeftoverAxis,
                     ShelfChoiceHeuristic.ShelfNextFit),
-                (w, h, d) => new BinPackGuillotineAlgorithm(
-                    w, h, d,
+                parameter => new BinPackGuillotineAlgorithm(
+                    parameter,
                     FreeCuboidChoiceHeuristic.CuboidMinHeight,
                     GuillotineSplitHeuristic.SplitLongerLeftoverAxis),
-                (w, h, d) => new BinPackGuillotineAlgorithm(
-                    w, h, d,
+                parameter => new BinPackGuillotineAlgorithm(
+                    parameter,
                     FreeCuboidChoiceHeuristic.CuboidMinHeight,
                     GuillotineSplitHeuristic.SplitShorterLeftoverAxis));
         }

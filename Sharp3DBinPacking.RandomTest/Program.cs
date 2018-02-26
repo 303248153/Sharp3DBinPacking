@@ -40,16 +40,20 @@ namespace Sharp3DBinPacking.RandomTest
             var binWidth = RandomInstance.Next(100, 5001);
             var binHeight = RandomInstance.Next(100, 5001);
             var binDepth = RandomInstance.Next(100, 5001);
+            var binWeight = RandomInstance.Next(100, 5001);
             var cuboidsCount = RandomInstance.Next(50, 501);
+            var allowRotateVertically = RandomInstance.Next(0, 2) == 0;
             var cuboids = new List<Cuboid>();
             for (var x = 0; x < cuboidsCount; ++x)
             {
                 var width = RandomInstance.Next(1, binWidth + 1);
                 var height = RandomInstance.Next(1, binHeight + 1);
                 var depth = RandomInstance.Next(1, binDepth + 1);
-                cuboids.Add(new Cuboid(width, height, depth));
+                var weight = RandomInstance.Next(1, binWeight / 20 + 1);
+                cuboids.Add(new Cuboid(width, height, depth, weight, null));
             }
-            var parameter = new BinPackParameter(binWidth, binHeight, binDepth, cuboids);
+            var parameter = new BinPackParameter(
+                binWidth, binHeight, binDepth, binWeight, allowRotateVertically, cuboids);
             return binPacker.Pack(parameter);
         }
     }
