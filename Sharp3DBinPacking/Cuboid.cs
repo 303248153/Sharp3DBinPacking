@@ -12,11 +12,17 @@ namespace Sharp3DBinPacking
         public decimal X { get; set; }
         public decimal Y { get; set; }
         public decimal Z { get; set; }
+        public object Tag { get; set; }
         internal bool IsPlaced { get; set; }
 
         public Cuboid() { }
-        public Cuboid(decimal width, decimal height, decimal depth) : this(width, height, depth, 0, 0, 0) { }
-        public Cuboid(decimal width, decimal height, decimal depth, decimal x, decimal y, decimal z)
+        public Cuboid(decimal width, decimal height, decimal depth) :
+            this(width, height, depth, 0, 0, 0, null) { }
+        public Cuboid(decimal width, decimal height, decimal depth, object tag) :
+            this(width, height, depth, 0, 0, 0, tag) { }
+        public Cuboid(decimal width, decimal height, decimal depth, decimal x, decimal y, decimal z) :
+            this(width, height, depth, x, y, z, null) { }
+        public Cuboid(decimal width, decimal height, decimal depth, decimal x, decimal y, decimal z, object tag)
         {
             Width = width;
             Height = height;
@@ -24,6 +30,7 @@ namespace Sharp3DBinPacking
             X = x;
             Y = y;
             Z = z;
+            Tag = tag;
         }
 
         public void ResetPlacedInformation()
