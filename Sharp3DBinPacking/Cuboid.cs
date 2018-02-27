@@ -18,11 +18,14 @@ namespace Sharp3DBinPacking
 
         public Cuboid() { }
         public Cuboid(decimal width, decimal height, decimal depth) :
-            this(width, height, depth, 0, 0, 0, 0, null) { }
+            this(width, height, depth, 0, 0, 0, 0, null)
+        { }
         public Cuboid(decimal width, decimal height, decimal depth, decimal weight, object tag) :
-            this(width, height, depth, 0, 0, 0, weight, tag) { }
+            this(width, height, depth, 0, 0, 0, weight, tag)
+        { }
         public Cuboid(decimal width, decimal height, decimal depth, decimal x, decimal y, decimal z) :
-            this(width, height, depth, x, y, z, 0, null) { }
+            this(width, height, depth, x, y, z, 0, null)
+        { }
         public Cuboid(decimal width, decimal height, decimal depth, decimal x, decimal y, decimal z, decimal weight, object tag)
         {
             Width = width;
@@ -35,12 +38,9 @@ namespace Sharp3DBinPacking
             Tag = tag;
         }
 
-        public void ResetPlacedInformation()
+        public Cuboid CloneWithoutPlaceInformation()
         {
-            X = 0;
-            Y = 0;
-            Z = 0;
-            IsPlaced = false;
+            return new Cuboid(Width, Height, Depth, 0, 0, 0, Weight, Tag);
         }
 
         public override string ToString()

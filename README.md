@@ -1,8 +1,6 @@
 # 3D bin packing algorithms
 
 [![NuGet](https://img.shields.io/nuget/vpre/Sharp3DBinPacking.svg)](http://www.nuget.org/packages/Sharp3DBinPacking)
-[![license](https://img.shields.io/github/license/303248153/Sharp3DBinPacking.svg)]() 
-[![GitHub release](https://img.shields.io/github/release/303248153/Sharp3DBinPacking.svg)]()
 
 [Bin packing problem](https://en.wikipedia.org/wiki/Bin_packing_problem).
 

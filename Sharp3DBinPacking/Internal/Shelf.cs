@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sharp3DBinPacking.Internal
+﻿namespace Sharp3DBinPacking.Internal
 {
     public class Shelf
     {
@@ -15,6 +11,11 @@ namespace Sharp3DBinPacking.Internal
             StartY = startY;
             Height = height;
             Guillotine = new Guillotine2D(binWidth, binDepth);
+        }
+
+        public override string ToString()
+        {
+            return $"Shelf(StartY: {StartY}, Height: {Height})";
         }
     }
 }

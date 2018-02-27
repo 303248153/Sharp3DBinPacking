@@ -24,15 +24,14 @@ namespace Sharp3DBinPacking
         {
             // [ [ cuboid in bin a, cuboid in bin a, ... ], [ cuboid in bin b, ... ] ]
             IList<IList<Cuboid>> bestResult = null;
+            var allResults = new List<IList<IList<Cuboid>>>();
             string bestAlgorithmName = null;
             foreach (var factory in _factories)
             {
                 foreach (var cuboids in GetCuboidsPermutations(parameter.Cuboids))
                 {
                     // reset cuboids state
-                    var unpackedCuboids = cuboids.ToList();
-                    foreach (var cuboid in unpackedCuboids)
-                        cuboid.ResetPlacedInformation();
+                    var unpackedCuboids = cuboids.Select(c => c.CloneWithoutPlaceInformation()).ToList();
                     var result = new List<IList<Cuboid>>();
                     var algorithmName = "";
                     while (unpackedCuboids.Count > 0)
@@ -52,6 +51,8 @@ namespace Sharp3DBinPacking
                     // verify this result
                     if (_verifyOption == BinPackerVerifyOption.All)
                         Verify(parameter, algorithmName, result);
+                    // add to all results
+                    allResults.Add(result);
                     // update best result if all cuboids is placed and uses less bins
                     if (unpackedCuboids.Count == 0 &&
                         (bestResult == null || result.Count < bestResult.Count))
@@ -72,7 +73,7 @@ namespace Sharp3DBinPacking
             // verify the best result
             if (_verifyOption == BinPackerVerifyOption.BestOnly)
                 Verify(parameter, bestAlgorithmName, bestResult);
-            return new BinPackResult(bestResult, bestAlgorithmName);
+            return new BinPackResult(bestResult, allResults, bestAlgorithmName);
         }
 
         private void Verify(BinPackParameter parameter, string algorithmName, IList<IList<Cuboid>> result)

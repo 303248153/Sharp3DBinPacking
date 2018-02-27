@@ -201,9 +201,12 @@ namespace Sharp3DBinPacking.Algorithms
 
         private void StartNewShelf(decimal startingHeight)
         {
-            if (_shelves.Count > 0)
-                _currentY += _shelves.Last().Height;
+            var lastShelf = _shelves.LastOrDefault();
+            if (lastShelf != null)
+                _currentY += lastShelf.Height;
             var shelf = new Shelf(_currentY, startingHeight, _parameter.BinWidth, _parameter.BinDepth);
+            if (lastShelf != null && lastShelf.StartY + lastShelf.Height > shelf.StartY)
+                throw new ArithmeticException($"shelf intersects: {lastShelf}, {shelf}");
             _shelves.Add(shelf);
         }
 
