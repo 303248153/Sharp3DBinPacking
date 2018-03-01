@@ -69,6 +69,9 @@ namespace Sharp3DBinPacking.Algorithms
                         }
                     }
                     break;
+
+                default:
+                    throw new NotSupportedException($"shelf choice is unsupported: {method}");
             }
 
             // The rectangle did not fit on any of the shelves. Open a new shelf.

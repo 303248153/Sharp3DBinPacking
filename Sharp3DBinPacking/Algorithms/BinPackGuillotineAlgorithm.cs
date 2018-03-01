@@ -205,7 +205,7 @@ namespace Sharp3DBinPacking.Algorithms
             }
         }
 
-        private decimal ScoreByHeuristic(
+        private static decimal ScoreByHeuristic(
             Cuboid cuboid,
             Cuboid freeCuboid,
             FreeCuboidChoiceHeuristic cuboidChoice)

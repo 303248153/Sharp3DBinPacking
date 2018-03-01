@@ -76,7 +76,7 @@ namespace Sharp3DBinPacking
             return new BinPackResult(bestResult, allResults, bestAlgorithmName);
         }
 
-        private void Verify(BinPackParameter parameter, string algorithmName, IList<IList<Cuboid>> result)
+        private static void Verify(BinPackParameter parameter, string algorithmName, IList<IList<Cuboid>> result)
         {
             //       o--------o
             //      /|       /|
@@ -132,7 +132,7 @@ namespace Sharp3DBinPacking
             }
         }
 
-        public IEnumerable<IEnumerable<Cuboid>> GetCuboidsPermutations(IEnumerable<Cuboid> cuboids)
+        private static IEnumerable<IEnumerable<Cuboid>> GetCuboidsPermutations(IEnumerable<Cuboid> cuboids)
         {
             yield return cuboids;
             yield return cuboids.OrderByDescending(x => x.Width);

@@ -1,6 +1,7 @@
 # 3D bin packing algorithms
 
 [![NuGet](https://img.shields.io/nuget/vpre/Sharp3DBinPacking.svg)](http://www.nuget.org/packages/Sharp3DBinPacking)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3cd218299e6d439eb49ace4641ce7bf9)](https://www.codacy.com/app/303248153/Sharp3DBinPacking?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=303248153/Sharp3DBinPacking&amp;utm_campaign=Badge_Grade)
 
 [Bin packing problem](https://en.wikipedia.org/wiki/Bin_packing_problem).
 
