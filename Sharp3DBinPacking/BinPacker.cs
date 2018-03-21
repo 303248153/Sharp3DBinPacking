@@ -3,7 +3,6 @@ using Sharp3DBinPacking.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Sharp3DBinPacking
 {
@@ -76,7 +75,7 @@ namespace Sharp3DBinPacking
             return new BinPackResult(bestResult, allResults, bestAlgorithmName);
         }
 
-        private static void Verify(BinPackParameter parameter, string algorithmName, IList<IList<Cuboid>> result)
+        public static void Verify(BinPackParameter parameter, string algorithmName, IList<IList<Cuboid>> result)
         {
             //       o--------o
             //      /|       /|
@@ -132,18 +131,17 @@ namespace Sharp3DBinPacking
             }
         }
 
-        private static IEnumerable<IEnumerable<Cuboid>> GetCuboidsPermutations(IEnumerable<Cuboid> cuboids)
+        public static IEnumerable<IEnumerable<Cuboid>> GetCuboidsPermutations(IEnumerable<Cuboid> cuboids)
         {
             yield return cuboids;
-            yield return cuboids.OrderByDescending(x => x.Width);
-            yield return cuboids.OrderByDescending(x => x.Height);
-            yield return cuboids.OrderByDescending(x => x.Depth);
+            yield return cuboids.OrderByDescending(x => Math.Max(Math.Max(x.Width, x.Height), x.Depth));
             yield return cuboids.OrderByDescending(x => x.Width * x.Height * x.Depth);
         }
 
-        public static IBinPacker GetDefault(BinPackerVerifyOption verifyOption)
+        public static BinPackAlgorithmFactory[] GetDefaultAlgorithmFactories()
         {
-            return new BinPacker(verifyOption,
+            return new BinPackAlgorithmFactory[]
+            {
                 parameter => new BinPackShelfAlgorithm(
                     parameter,
                     FreeRectChoiceHeuristic.RectBestAreaFit,
@@ -161,7 +159,13 @@ namespace Sharp3DBinPacking
                 parameter => new BinPackGuillotineAlgorithm(
                     parameter,
                     FreeCuboidChoiceHeuristic.CuboidMinHeight,
-                    GuillotineSplitHeuristic.SplitShorterLeftoverAxis));
+                    GuillotineSplitHeuristic.SplitShorterLeftoverAxis)
+            };
+        }
+
+        public static IBinPacker GetDefault(BinPackerVerifyOption verifyOption)
+        {
+            return new BinPacker(verifyOption, GetDefaultAlgorithmFactories());
         }
     }
 }
