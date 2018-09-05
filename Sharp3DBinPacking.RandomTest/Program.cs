@@ -12,30 +12,25 @@ namespace Sharp3DBinPacking.RandomTest
         static void Main(string[] args)
         {
             var binPacker = BinPacker.GetDefault(BinPackerVerifyOption.All);
-            var bestAlgorithmRecords = new Dictionary<string, int>();
+            var averageVolumeRate = 0m;
             var round = 0;
             while (true)
             {
-                var result = TestBinPacker(binPacker);
-                if (bestAlgorithmRecords.ContainsKey(result.BestAlgorithmName))
-                    bestAlgorithmRecords[result.BestAlgorithmName]++;
-                else
-                    bestAlgorithmRecords[result.BestAlgorithmName] = 1;
+                var tuple = TestBinPacker(binPacker);
+                var result = tuple.Item1;
+                var volumeRate = tuple.Item2;
+                averageVolumeRate = (averageVolumeRate * round + volumeRate) / (round + 1);
                 round++;
                 var binCount = result.BestResult.Count;
                 var cuboidCount = result.BestResult.Sum(x => x.Count);
-                Console.WriteLine($"Round {round} finished, {binCount} bins contains {cuboidCount} cuboids");
-                Console.WriteLine($"Best algorithm records:");
-                foreach (var pair in bestAlgorithmRecords.OrderByDescending(x => x.Value))
-                {
-                    Console.WriteLine($"{pair.Key}: {pair.Value}");
-                }
-                Console.WriteLine();
+                Console.WriteLine(
+                    $"Round {round} finished, {binCount} bins contains {cuboidCount} cuboids, " +
+                    $"average volume rate {averageVolumeRate.ToString("0.0000")}");
                 Thread.Sleep(1);
             }
         }
 
-        static BinPackResult TestBinPacker(IBinPacker binPacker)
+        static Tuple<BinPackResult, decimal> TestBinPacker(IBinPacker binPacker)
         {
             var binWidth = RandomInstance.Next(100, 5001);
             var binHeight = RandomInstance.Next(100, 5001);
@@ -54,7 +49,9 @@ namespace Sharp3DBinPacking.RandomTest
             }
             var parameter = new BinPackParameter(
                 binWidth, binHeight, binDepth, binWeight, allowRotateVertically, cuboids);
-            return binPacker.Pack(parameter);
+            var result = binPacker.Pack(parameter);
+            var volumeRate = BinPacker.GetVolumeRate(parameter, result.BestResult);
+            return Tuple.Create(result, volumeRate);
         }
     }
 }
