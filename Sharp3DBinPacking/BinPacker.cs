@@ -32,9 +32,10 @@ namespace Sharp3DBinPacking
                 IList<Cuboid> singleBestRemain = null;
                 decimal singleBestVolumeRate = 0;
                 string singleBestAlgorihm = null;
-                foreach (var factory in _factories)
+                for (int i = 0; i < _factories.Length; i++)
                 {
-                    foreach (var cuboids in GetCuboidsPermutations(pendingCuboids, parameter.ShuffleCount))
+                    BinPackAlgorithmFactory factory = _factories[i];
+                    foreach (var cuboids in GetCuboidsPermutations(pendingCuboids, parameter.ShuffleCount, parameter.Seed + i))
                     {
                         var targetCuboids = cuboids.Select(c => c.CloneWithoutPlaceInformation()).ToList();
                         var algorithm = factory(parameter);
@@ -152,14 +153,14 @@ namespace Sharp3DBinPacking
         }
 
         public static IEnumerable<IEnumerable<Cuboid>> GetCuboidsPermutations(
-            IEnumerable<Cuboid> cuboids, int shuffleCount)
+            IEnumerable<Cuboid> cuboids, int shuffleCount, int seed)
         {
             yield return cuboids;
             yield return cuboids.OrderByDescending(x => Math.Max(Math.Max(x.Width, x.Height), x.Depth));
             yield return cuboids.OrderByDescending(x => x.Width * x.Height * x.Depth);
             if (shuffleCount > 0)
             {
-                var random = new Random();
+                var random = new Random(seed);
                 for (var x = 0; x < shuffleCount; ++x)
                 {
                     yield return cuboids.OrderBy(_ => random.Next(int.MaxValue));
