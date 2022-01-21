@@ -13,14 +13,15 @@ namespace Sharp3DBinPacking
         public bool AllowRotateVertically { get; private set; }
         public IEnumerable<Cuboid> Cuboids { get; private set; }
         public int ShuffleCount { get; set; }
+        public int Seed { get; set; }
 
         public BinPackParameter(
-            decimal binWidth, decimal binHeight, decimal binDepth, IEnumerable<Cuboid> cuboids) :
-            this(binWidth, binHeight, binDepth, 0, true, cuboids) { }
+            decimal binWidth, decimal binHeight, decimal binDepth, IEnumerable<Cuboid> cuboids, int seed = 0) :
+            this(binWidth, binHeight, binDepth, 0, true, cuboids, seed) { }
 
         public BinPackParameter(
             decimal binWidth, decimal binHeight, decimal binDepth, decimal binWeight,
-            bool allowRotateVertically, IEnumerable<Cuboid> cuboids)
+            bool allowRotateVertically, IEnumerable<Cuboid> cuboids, int seed)
         {
             BinWidth = binWidth;
             BinHeight = binHeight;
@@ -29,6 +30,7 @@ namespace Sharp3DBinPacking
             AllowRotateVertically = allowRotateVertically;
             Cuboids = cuboids;
             ShuffleCount = 5;
+            Seed = seed;
         }
     }
 }

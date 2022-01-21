@@ -48,7 +48,7 @@ namespace Sharp3DBinPacking.RandomTest
                 cuboids.Add(new Cuboid(width, height, depth, weight, null));
             }
             var parameter = new BinPackParameter(
-                binWidth, binHeight, binDepth, binWeight, allowRotateVertically, cuboids);
+                binWidth, binHeight, binDepth, binWeight, allowRotateVertically, cuboids, 0);
             var result = binPacker.Pack(parameter);
             var volumeRate = BinPacker.GetVolumeRate(parameter, result.BestResult);
             return Tuple.Create(result, volumeRate);
